@@ -6,12 +6,12 @@ receivers:
 exporters:
   debug:
     verbosity: detailed
-  otlp/2:
-    endpoint: ${env:TEMPO}
+  otlp:
+    endpoint: ${env:TEMPO_URL}
     tls:
       insecure: true
   otlp/dashboard:
-    endpoint: host.docker.internal:16016
+    endpoint: ${env:DASHBOARD_URL}
     tls:
       insecure: true
 
@@ -19,5 +19,5 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [otlp/2, otlp/dashboard]
+      exporters: [otlp, otlp/dashboard]
       # exporters: [otlp, oltphttp, debug]

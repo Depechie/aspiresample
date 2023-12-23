@@ -1,4 +1,4 @@
-using Aspire.Hosting.Utils;
+using k8s.KubeConfigModels;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
@@ -14,7 +14,8 @@ var otel = builder.AddContainer("otel", "otel/opentelemetry-collector-contrib", 
     .WithServiceBinding(containerPort: 55679, hostPort: 9200, name: "zpages-http", scheme: "http")
     .WithVolumeMount("../config/otel.yml", "/etc/otel-collector-config.yaml", VolumeMountType.Bind)
     .WithArgs("--config=/etc/otel-collector-config.yaml")
-    .WithEnvironment("TEMPO", tempo.GetEndpoint("otlp"));
+    .WithEnvironment("TEMPO_URL", tempo.GetEndpoint("otlp"))
+    .WithDashboardEndpoint("DASHBOARD_URL");
 
 var apiService = builder.AddProject<Projects.aspiresample_ApiService>("apiservice")
     .WithEnvironment("OTEL_EXPORTER_OTLP_ENDPOINT", otel.GetEndpoint("grpc"));
