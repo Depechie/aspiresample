@@ -7,7 +7,7 @@ exporters:
   debug:
     verbosity: detailed
   otlp/2:
-    endpoint: host.docker.internal:4007
+    endpoint: ${env:TEMPO}
     tls:
       insecure: true
   otlp/dashboard:
