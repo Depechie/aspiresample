@@ -7,22 +7,17 @@ exporters:
   debug:
     verbosity: detailed
   otlp:
-    endpoint: localhost:4007
+    endpoint: ${env:TEMPO_URL}
     tls:
       insecure: true
-  otlphttp:
-    endpoint: http://localhost:4008
+  otlp/dashboard:
+    endpoint: ${env:DASHBOARD_URL}
     tls:
       insecure: true
-
-extensions:
-  zpages:
-    endpoint: 0.0.0.0:55679
 
 service:
-  extensions: [zpages]
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [otlp]
+      exporters: [otlp, otlp/dashboard]
       # exporters: [otlp, oltphttp, debug]
