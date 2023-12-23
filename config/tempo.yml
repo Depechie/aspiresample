@@ -5,10 +5,7 @@ distributor:
   receivers:
     otlp:
       protocols:
-        http:
-          endpoint: localhost:4008
         grpc:
-          endpoint: localhost:4007
 
 ingester:
   max_block_duration: 5m               # cut the headblock when this much time passes. this is being set for demo purposes and should probably be left alone normally

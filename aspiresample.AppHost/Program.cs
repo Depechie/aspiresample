@@ -1,9 +1,8 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddContainer("tempo", "grafana/tempo", "2.3.1")    
+builder.AddContainer("tempo", "grafana/tempo", "2.3.1")
     .WithServiceBinding(containerPort: 3200, hostPort: 3200, name: "tempo-http", scheme: "http")
-    .WithServiceBinding(containerPort: 4317, hostPort: 4007, name: "tempo-ingres-grpc", scheme: "grpc")
-    .WithServiceBinding(containerPort: 4318, hostPort: 4008, name: "tempo-ingres-http", scheme: "http")
+    .WithServiceBinding(containerPort: 4317, hostPort: 4007, name: "tempo-ingres-grpc", scheme: "http")
     .WithVolumeMount("../config/tempo.yml", "/etc/tempo.yaml", VolumeMountType.Bind)
     .WithVolumeMount("tempo", "/tmp/tempo", VolumeMountType.Named)
     .WithArgs("-config.file=/etc/tempo.yaml");
@@ -18,6 +17,7 @@ var apiService = builder.AddProject<Projects.aspiresample_ApiService>("apiservic
     .WithEnvironment("OTEL_EXPORTER_OTLP_ENDPOINT", otel.GetEndpoint("otel-grpc"));
 
 builder.AddProject<Projects.aspiresample_Web>("webfrontend")
+    .WithEnvironment("OTEL_EXPORTER_OTLP_ENDPOINT", otel.GetEndpoint("otel-grpc"))
     .WithReference(apiService);
 
 builder.Build().Run();
