@@ -17,10 +17,10 @@ var otel = builder.AddContainer("otel", "otel/opentelemetry-collector-contrib", 
     .WithEnvironment("TEMPO", tempo.GetEndpoint("otlp"));
 
 var apiService = builder.AddProject<Projects.aspiresample_ApiService>("apiservice")
-    .WithEnvironment("OTEL_EXPORTER_OTLP_ENDPOINT", otel.GetEndpoint("otel-grpc"));
+    .WithEnvironment("OTEL_EXPORTER_OTLP_ENDPOINT", otel.GetEndpoint("grpc"));
 
 builder.AddProject<Projects.aspiresample_Web>("webfrontend")
-    .WithEnvironment("OTEL_EXPORTER_OTLP_ENDPOINT", otel.GetEndpoint("otel-grpc"))
+    .WithEnvironment("OTEL_EXPORTER_OTLP_ENDPOINT", otel.GetEndpoint("grpc"))
     .WithReference(apiService);
 
 builder.Build().Run();
