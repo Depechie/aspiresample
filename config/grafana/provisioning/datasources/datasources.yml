@@ -1,0 +1,13 @@
+#https://grafana.com/docs/grafana/latest/administration/provisioning/
+apiVersion: 1
+
+datasources:
+- name: Tempo
+  type: tempo
+  uid: tempo
+  access: proxy
+  url: http://host.docker.internal:3200
+  basicAuth: false
+  isDefault: false
+  version: 1
+  editable: false
