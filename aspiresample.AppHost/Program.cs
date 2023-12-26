@@ -1,5 +1,3 @@
-using k8s.KubeConfigModels;
-
 var builder = DistributedApplication.CreateBuilder(args);
 
 var loki = builder.AddContainer("loki", "grafana/loki", "2.9.2")
@@ -22,7 +20,7 @@ var otel = builder.AddContainer("otel", "otel/opentelemetry-collector-contrib", 
     .WithVolumeMount("../config/otel.yml", "/etc/otel-collector-config.yaml", VolumeMountType.Bind)
     .WithArgs("--config=/etc/otel-collector-config.yaml")
     .WithEnvironment("TEMPO_URL", tempo.GetEndpoint("otlp"))
-    .WithEnvironment("LOKI_URL", loki.GetEndpoint("grpc"))
+    .WithLokiPushUrl("LOKI_URL", loki.GetEndpoint("http"))
     .WithDashboardEndpoint("DASHBOARD_URL");
 
 builder.AddContainer("grafana", "grafana/grafana", "10.2.1")
