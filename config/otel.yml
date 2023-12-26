@@ -23,7 +23,7 @@ service:
   pipelines:
     logs:
       receivers: [otlp]
-      exporters: [loki, debug]
+      exporters: [loki, otlp/dashboard, debug]
     traces:
       receivers: [otlp]
       exporters: [otlp, otlp/dashboard]
